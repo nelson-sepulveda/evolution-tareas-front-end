@@ -21,4 +21,18 @@ Ejecute `ng serve --open` para cargar el front-end. En la ruta `http://localhost
 
 Ejecute `ng build` para generar el proyecto para producción. El proyecto generara una carpeta `dist`
 
+## Explicación
+
+Aquí se encuentra el repositorio del Back-end [Back-end](https://github.com/nelson-sepulveda/evolution-tareas-back-end)
+
+El back-end esta desarrollado en NodeJS utilizando como base de datos MongoDB
+
+Para la ejecución del Back-end se debe ejecutar el comando `node app.js`
+
+La base de datos se utilizan dos modelos los cuales son autor y task donde se encuentran relacionados como en el siguiente modelo
+
+Para el consumo de los servicios del back-end se utilizo el HttpService de Angular
+
+![alt text](https://github.com/nelson-sepulveda/evolution-tareas-front-end/blob/master/modelo.jpg?raw=true)
+
 
