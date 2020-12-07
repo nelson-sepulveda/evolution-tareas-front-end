@@ -1,0 +1,193 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <img src="https://camo.githubusercontent.com/db0fe629dba43401bb123851e5ebf45a21f0294b10e399ec59f77e95b0261ab9/687474703a2f2f652d766f6c7574696f6e2e636f2f77702d636f6e74656e742f75706c6f6164732f323031372f30392f65766f6c7574696f6e2d6465736b746f702e706e67">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="mr-auto"></div>
+      <ul class="navbar-nav">
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" (click)="crearTarea(createTaskModal)">Crear Tarea</button>
+        <button class="btn btn-outline-success my-2 my-sm-0" (click)="cerrarSesion()">Cerrar Sesión</button>
+      </ul>
+    </div>
+  </nav>
+  <div class="container-fluid mt-3">
+    <div>
+      <ngb-toast class="bg-success text-light" *ngIf="showToastCreatetask" [delay]="3000">
+        {{ toastMessage }}
+      </ngb-toast>
+      <ngb-toast class="bg-danger text-light" *ngIf="showToastDanger" [autohide]="false" [delay]="3000">
+        {{ toastMessageDanger }}
+      </ngb-toast>
+    </div>
+    <div class="column">
+      <div *ngFor="let task of tasks" class="row d-flex justify-content-center">
+        <div class="card mt-3 mb-3" style="width: 30rem;">
+          <div class="card-header">
+            <h5 class="card-title">{{ task.nombre }}</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Prioridad: <span class="text-muted"> {{ task.prioridad }} </span> </p>
+            <div [innerHtml]="tagPrioridad(task)"></div>
+            <p class="card-text">Fecha: {{ task.fecha | date }} </p>
+            <div *ngIf="!task.completed" [innerHTML]="evaluarTask(task)"></div>
+            <div *ngIf="task.completed">
+              <div class="alert alert-info text-center" role="alert">
+                ¡Tarea Completada!
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-around">
+            <button *ngIf="!task.completed" type="button" (click)="editarTask(task, updateTaskModal)" class="btn btn-outline-success">Editar</button>
+            <button *ngIf="!task.completed" type="button" (click)="eliminarTask(task, deleteTaskModal)" class="btn btn-outline-danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #createTaskModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">¡Crear Tarea!</h5>
+      <button type="button" class="close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="booleanCreate">
+        <div class="alert alert-danger" role="alert">
+          {{ createMessage }}
+        </div>
+      </div>
+      <form>
+        <div class="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            [(ngModel)]="nombreTarea"
+            name="nombreTarea"
+            required
+            class="form-control"
+            id="nombreTarea"
+            aria-describedby="nombreTarea"
+          >
+        </div>
+        <div class="form-group">
+          <label>Prioridad</label>
+          <select [(ngModel)]="prioridadTarea" class="custom-select" id="prioridadTarea" name="prioridadTarea">
+            <option selected>Seleccione una prioridad...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input
+            type="date"
+            required
+            class="form-control"
+            name="fechaTarea"
+            [(ngModel)]="fechaTarea"
+            id="fechaTarea"
+          >
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cerrar</button>
+      <button type="button" (click)="registerTask()" class="btn btn-outline-primary">Registrar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #deleteTaskModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Eliminar Tarea</h5>
+      <button type="button" class="close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="fs-16"> ¿ Desea eliminar la tarea llamada <span class="font-weight-bold"> {{ nombreTaskDelete }} </span> ? </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()" data-dismiss="modal">Cerrar</button>
+      <button (click)="deleteTaskAction()" type="button" class="btn btn-outline-danger">Eliminar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #updateTaskModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">¡Editar Tarea!</h5>
+      <button type="button" class="close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="booleanUpdate">
+        <div class="alert alert-danger" role="alert">
+          {{ updateMessage }}
+        </div>
+      </div>
+      <form>
+        <div class="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            [(ngModel)]="nombreTareaUpdate"
+            name="nombreTareaUpdate"
+            required
+            class="form-control"
+            id="nombreTareaUpdate"
+            aria-describedby="nombreTareaUpdate"
+          >
+        </div>
+        <div class="form-group">
+          <label>Prioridad</label>
+          <select
+            [(ngModel)]="prioridadTareaUpdate"
+            class="custom-select"
+            id="prioridadTareaUpdate"
+            name="prioridadTareaUpdate"
+          >
+            <option selected>Seleccione una prioridad...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input
+            type="date"
+            required
+            class="form-control"
+            name="fechaTareaUpdate"
+            [(ngModel)]="fechaTareaUpdate"
+            id="fechaTareaUpdate"
+          >
+        </div>
+        <div class="form-group">
+          <label>Completar Tarea</label>
+          <input
+            type="checkbox"
+            style="margin-top: 0.5rem !important; margin-left: 0.5rem !important;"
+            name="completedTareaUpdate"
+            [(ngModel)]="completedTareaUpdate"
+            id="completedTareaUpdate"
+          >
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cerrar</button>
+      <button type="button" (click)="updateTaskAction()" class="btn btn-outline-success">Editar</button>
+    </div>
+  </ng-template>
+</div>
+

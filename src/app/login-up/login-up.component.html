@@ -1,0 +1,89 @@
+<div class="h-100">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <img src="https://camo.githubusercontent.com/db0fe629dba43401bb123851e5ebf45a21f0294b10e399ec59f77e95b0261ab9/687474703a2f2f652d766f6c7574696f6e2e636f2f77702d636f6e74656e742f75706c6f6164732f323031372f30392f65766f6c7574696f6e2d6465736b746f702e706e67">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+      <button class="btn btn-outline-success my-2 my-sm-0" (click)="open(registerModal)">¡Registrarme!</button>
+    </div>
+  </nav>
+
+  <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center align-items-center mt-5 container-fluid w-100">
+    <div class="col mb-4 md-6">
+      <div *ngIf="errorLogin">
+        <div class="alert alert-danger" role="alert">
+          {{ messageLogin }}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          Inicia Sesión
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Correo Electronico</label>
+              <input type="email" name="email" [(ngModel)]="email" required class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <small id="emailHelp" class="form-text text-muted">No Compartiremos tus datos personales</small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Contraseña</label>
+              <input type="password" required class="form-control" name="password" [(ngModel)]="password" id="exampleInputPassword1">
+            </div>
+            <button (click)="loginSesionUser()" class="btn btn-outline-primary">Ingresar</button>
+          </form>
+        </div>
+        <div class="card-footer text-muted">
+          &copy; Evolution 2020
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #registerModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">¡Registrate!</h5>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="errorRegister">
+        <div class="alert alert-danger" role="alert">
+          {{ errorRegisterMessage }}
+        </div>
+      </div>
+      <div *ngIf="successRegister">
+        <div class="alert alert-success" role="alert">
+          {{ successRegisterMessage }}
+        </div>
+      </div>
+      <form>
+        <div class="form-group">
+          <label for="nombreAutor">Nombre</label>
+          <input type="text" name="nombreAutor" [(ngModel)]="nombreAutor" required class="form-control" id="nombreAutor" aria-describedby="nombrelHelp">
+        </div>
+        <div class="form-group">
+          <label for="emailAutor">Correo Electronico</label>
+          <input type="email" required class="form-control" name="emailAutor" [(ngModel)]="emailAutor" id="emailAutor">
+        </div>
+        <div class="form-group">
+          <label for="passwordAutor">Contraseña</label>
+          <input type="password" required class="form-control" name="passwordAutor" [(ngModel)]="passwordAutor" id="passwordAutor">
+        </div>
+        <div class="form-group">
+          <label for="confirmPasswordAutor">Confirmar Contraseña</label>
+          <input type="password" required class="form-control" name="confirmPasswordAutor" [(ngModel)]="confirmPasswordAutor" id="confirmPasswordAutor">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Cross click')">Cerrar</button>
+      <button type="button" (click)="registerUser()" class="btn btn-outline-primary">Registrarme</button>
+    </div>
+  </ng-template>
+  <!-- <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  </div> -->
+</div>
